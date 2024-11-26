@@ -1,52 +1,53 @@
-import { useState } from "react"
+import { useState } from "react";
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
-} from "../../utils/firebase/firebase.utils"
-import FormInput from "../form-input/form-input.components"
-import "./sign-up-form.scss"
-import Button from "../button/button.component"
+} from "../../utils/firebase/firebase.utils";
+import FormInput from "../form-input/form-input.components";
+import "./sign-up-form.scss";
+import Button from "../button/button.component";
 
 const defaultFormFields = {
   displayName: "",
   email: "",
   password: "",
   confirmPassword: "",
-}
+};
 
 const SignUpForm = () => {
-  const [formField, setFormField] = useState(defaultFormFields)
-  const { displayName, email, password, confirmPassword } = formField
+  const [formField, setFormField] = useState(defaultFormFields);
+  const { displayName, email, password, confirmPassword } = formField;
 
   const handleChange = (event) => {
-    const { name, value } = event.target
-    setFormField({ ...formField, [name]: value })
-  }
+    const { name, value } = event.target;
+    setFormField({ ...formField, [name]: value });
+  };
 
   const resetForm = () => {
-    setFormField(defaultFormFields)
-  }
+    setFormField(defaultFormFields);
+  };
 
   const handleSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     if (password !== confirmPassword) {
-      alert("password and confirmPassword not right")
-      return
+      alert("password and confirmPassword not right");
+      return;
     }
 
     try {
-      const { user } = await createAuthUserWithEmailAndPassword(email, password)
-      await createUserDocumentFromAuth(user, { displayName })
-      resetForm()
+      const { user } = await createAuthUserWithEmailAndPassword(
+        email,
+        password
+      );
+      await createUserDocumentFromAuth(user, { displayName });
+      resetForm();
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
-        alert("email already in use")
+        alert("email already in use");
       }
-      console.log(error)
+      console.log(error);
     }
-
-    // console.log(response)
-  }
+  };
 
   return (
     <div className="sign-up-container">
@@ -88,6 +89,6 @@ const SignUpForm = () => {
         <Button type="submit">Sign Up</Button>
       </form>
     </div>
-  )
-}
-export default SignUpForm
+  );
+};
+export default SignUpForm;
